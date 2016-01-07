@@ -5,18 +5,6 @@ import java.io.*;
 
 public class ImageEditor {
 
-  public Image set_width_and_height(String token) {
-    Image image = new Image();
-
-    String width = token.substring(0, token.indexOf(" "));
-    String height = token.substring(token.indexOf(" ")+1, token.length());
-    image.width = Integer.valueOf(width);
-    image.height = Integer.valueOf(height);
-    image.pixels = new Pixel[image.width][image.height];
-
-    return image;
-  }
-
   public Image parse_file(Scanner scanner) {
 
     Image image = new Image();
@@ -30,7 +18,6 @@ public class ImageEditor {
       while (scanner.hasNext()) {
 
         String token = scanner.next();
-        System.out.println("token =>" + token);
 
         if (token.startsWith("#")) {
           // skip comments
@@ -45,7 +32,7 @@ public class ImageEditor {
           state = "height";
         } else if (state.equals("height")) {
           image.height = Integer.valueOf(token);
-          image.pixels = new Pixel[image.width][image.height];
+          image.pixels = new Pixel[image.height][image.width];
           state = "max_color_value";
         } else if (state.equals("max_color_value")) {
           image.max_color_value = Integer.valueOf(token);
@@ -60,7 +47,7 @@ public class ImageEditor {
         } else if (state.equals("blue")) {
           pixel.blue = Integer.valueOf(token);
 
-          // pixel is complete, add to image pixels[][]
+          // pixel is complete, add to image.pixels[][]
           image.pixels[row][col] = pixel;
 
           // update state, row & col
@@ -75,9 +62,9 @@ public class ImageEditor {
       }
     } catch (Exception e) {
       System.out.println("Exception => " + e);
+    } finally {
+      return image;
     }
-
-    return image;
   }
 
   public Image load_image (String [] args) {
