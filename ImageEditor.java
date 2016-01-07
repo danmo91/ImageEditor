@@ -22,59 +22,54 @@ public class ImageEditor {
     Image image = new Image();
     Pixel pixel = new Pixel();
     String state = "P3";
-    int line_number = 1;
     int row = 0;
     int col = 0;
 
     try {
 
-      while (scanner.hasNextLine()) {
+      while (scanner.hasNext()) {
 
-        String token = scanner.nextLine();
+        String token = scanner.next();
+        System.out.println("token =>" + token);
 
-        // if line starts with '#' then ignore
-        if (!token.startsWith("#")) {
-          // check for 'P3'
-          if (state.equals("P3")) {
-            state = "width";
-            if (!token.equals("P3")) {
-              throw new Exception("missing 'P3' from file header");
-            }
+        if (token.startsWith("#")) {
+          // skip comments
+          String rest_of_line = scanner.nextLine();
+        } else if (state.equals("P3")) {
+          if (!token.equals("P3")) {
+            throw new Exception("missing 'P3' from file header");
           }
-          // get width and height
-          else if (state.equals("width")) {
-            state = "max_value";
-            image = set_width_and_height(token);
-          }
-          // get max color value
-          else if (state.equals("max_value")) {
-            state = "red";
-            image.max_color_value = Integer.valueOf(token);
-          }
-          // get pixels
-          else if (state.equals("red")) {
-            pixel = new Pixel();
-            pixel.red = Integer.valueOf(token);
-            state = "green";
-          } else if (state.equals("green")) {
-            pixel.green = Integer.valueOf(token);
-            state = "blue";
-          } else if (state.equals("blue")) {
-            pixel.blue = Integer.valueOf(token);
+          state = "width";
+        } else if (state.equals("width")) {
+          image.width = Integer.valueOf(token);
+          state = "height";
+        } else if (state.equals("height")) {
+          image.height = Integer.valueOf(token);
+          image.pixels = new Pixel[image.width][image.height];
+          state = "max_color_value";
+        } else if (state.equals("max_color_value")) {
+          image.max_color_value = Integer.valueOf(token);
+          state = "red";
+        } else if (state.equals("red")) {
+          pixel = new Pixel();
+          pixel.red = Integer.valueOf(token);
+          state = "green";
+        } else if (state.equals("green")) {
+          pixel.green = Integer.valueOf(token);
+          state = "blue";
+        } else if (state.equals("blue")) {
+          pixel.blue = Integer.valueOf(token);
 
-            image.pixels[row][col] = pixel;
-            state = "red";
+          // pixel is complete, add to image pixels[][]
+          image.pixels[row][col] = pixel;
 
-            // update row and col
-            if (col == image.width-1 && row < image.height) {
-              row++;
-            }
-
-            if (col < image.width-1) {
-              col++;
-            } else {
-              col = 0;
-            }
+          // update state, row & col
+          state = "red";
+          if (col < image.width -1) {
+            col++;
+          } else {
+            col = 0;
+            row++;
           }
         }
       }
@@ -97,23 +92,26 @@ public class ImageEditor {
       scanner.close();
 
     }
+
     catch (Exception e) {
       System.out.println("exception => " + e);
     }
-    return image;
+
+    finally {
+      return image;
+    }
+
   }
 
   public static void main(String [] args) {
 
     // create ImageEditor object
-    ImageEditor ie = new ImageEditor();
+    ImageEditor imageEditor = new ImageEditor();
 
-    // load image
-    Image image = new Image();
-    image = ie.load_image(args);
+    // load image into memory
+    Image image = imageEditor.load_image(args);
 
     image.print();
-
     // perform transformation
 
     // save image
