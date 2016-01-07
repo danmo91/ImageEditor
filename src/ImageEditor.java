@@ -1,7 +1,8 @@
 import imageEditor.Image;
 import imageEditor.Pixel;
 import java.util.Scanner;
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
 
 public class ImageEditor {
 
@@ -16,47 +17,56 @@ public class ImageEditor {
     try {
 
       while (scanner.hasNext()) {
-
         String token = scanner.next();
 
         if (token.startsWith("#")) {
           // skip comments
           String rest_of_line = scanner.nextLine();
-        } else if (state.equals("P3")) {
-          if (!token.equals("P3")) {
-            throw new Exception("missing 'P3' from file header");
-          }
-          state = "width";
-        } else if (state.equals("width")) {
-          image.width = Integer.valueOf(token);
-          state = "height";
-        } else if (state.equals("height")) {
-          image.height = Integer.valueOf(token);
-          image.pixels = new Pixel[image.height][image.width];
-          state = "max_color_value";
-        } else if (state.equals("max_color_value")) {
-          image.max_color_value = Integer.valueOf(token);
-          state = "red";
-        } else if (state.equals("red")) {
-          pixel = new Pixel();
-          pixel.red = Integer.valueOf(token);
-          state = "green";
-        } else if (state.equals("green")) {
-          pixel.green = Integer.valueOf(token);
-          state = "blue";
-        } else if (state.equals("blue")) {
-          pixel.blue = Integer.valueOf(token);
-
-          // pixel is complete, add to image.pixels[][]
-          image.pixels[row][col] = pixel;
-
-          // update state, row & col
-          state = "red";
-          if (col < image.width -1) {
-            col++;
-          } else {
-            col = 0;
-            row++;
+        } else {
+          switch(state) {
+            case "P3":
+                if (!token.equals("P3")) {
+                  throw new Exception("missing 'P3' from file header");
+                }
+                state = "width";
+                break;
+            case "width":
+                image.width = Integer.valueOf(token);
+                state = "height";
+                break;
+            case "height":
+                image.height = Integer.valueOf(token);
+                image.pixels = new Pixel[image.height][image.width];
+                state = "max_color_value";
+                break;
+            case "max_color_value":
+                image.max_color_value = Integer.valueOf(token);
+                state = "red";
+                break;
+            case "red":
+                pixel = new Pixel();
+                pixel.red = Integer.valueOf(token);
+                state = "green";
+                break;
+            case "green":
+                pixel.green = Integer.valueOf(token);
+                state = "blue";
+                break;
+            case "blue":
+                pixel.blue = Integer.valueOf(token);
+                // pixel is complete, add to image.pixels[][]
+                image.pixels[row][col] = pixel;
+                // update row & col
+                if (col < image.width -1) {
+                  col++;
+                } else {
+                  col = 0;
+                  row++;
+                }
+                state = "red";
+                break;
+            default:
+                throw new Exception("invalid token => " + token);
           }
         }
       }
