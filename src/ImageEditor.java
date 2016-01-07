@@ -80,12 +80,10 @@ public class ImageEditor {
       scanner.close();
 
     }
-
     catch (Exception e) {
       System.out.println("exception => " + e);
       System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
     }
-
     finally {
       return image;
     }
@@ -134,8 +132,8 @@ public class ImageEditor {
   public Image emboss(Image image) {
 
     // for each pixel
-    for (int row = 0; row < image.height; row++) {
-      for (int col = 0; col < image.width; col++) {
+    for (int row = image.height-1; row > 0; row--) {
+      for (int col = image.width-1; col > 0; col--) {
 
         // get pixel
         Pixel pixel = image.pixels[row][col];
@@ -179,6 +177,7 @@ public class ImageEditor {
 
         // save
         image.pixels[row][col] = pixel;
+
       }
     }
     return image;
@@ -192,13 +191,13 @@ public class ImageEditor {
       // get transformation type
       String transformation = args[2];
 
-      System.out.println("transformation => " + transformation);
-
       // transform image
       if (transformation.equals("invert")) {
         image = invert(image);
       } else if (transformation.equals("grayscale")) {
         image = grayscale(image);
+      } else if (transformation.equals("emboss")) {
+        image = emboss(image);
       }
 
 
@@ -245,7 +244,6 @@ public class ImageEditor {
       output = append_pixels(image, output);
 
       // save StringBuilder output
-      System.out.println("output => \n" + output.toString());
       PrintWriter writer = new PrintWriter(new File(outFile));
       writer.println(output.toString());
       writer.close();
