@@ -17,7 +17,6 @@ public class Image {
       System.out.println("");
       System.out.println("row => " + row);
       for (int col = 0; col < width; col++) {
-        System.out.println("col => " + col);
         pixels[row][col].print();
       }
     }

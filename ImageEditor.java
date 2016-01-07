@@ -62,6 +62,7 @@ public class ImageEditor {
       }
     } catch (Exception e) {
       System.out.println("Exception => " + e);
+      System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
     } finally {
       return image;
     }
@@ -82,6 +83,7 @@ public class ImageEditor {
 
     catch (Exception e) {
       System.out.println("exception => " + e);
+      System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
     }
 
     finally {
@@ -90,18 +92,108 @@ public class ImageEditor {
 
   }
 
+  public Image invert (Image image) {
+    // inverted_value = max_color_value - original_value
+    for (int row = 0; row < image.height; row++) {
+      for (int col = 0; col < image.width; col++) {
+        // get pixel
+        Pixel pixel = image.pixels[row][col];
+        // transform each color
+        pixel.red = image.max_color_value - pixel.red;
+        pixel.green = image.max_color_value - pixel.green;
+        pixel.blue = image.max_color_value - pixel.blue;
+        // save
+        image.pixels[row][col] = pixel;
+      }
+    }
+
+    return image;
+  }
+
+  public Image transform (Image image, String [] args) {
+
+    // invert, grayscale, emboss, motionblur
+
+    try {
+      // get transformation type
+      String transformation = args[2];
+
+      System.out.println("transformation => " + transformation);
+
+      // transform image
+      if (transformation.equals("invert")) {
+        image = invert(image);
+      }
+
+
+    } catch (Exception e) {
+      System.out.println("Exception => " + e);
+      System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
+    } finally {
+      return image;
+    }
+  }
+
+  public StringBuilder build_file_header(Image image, String outFile) {
+    StringBuilder tmp = new StringBuilder();
+    // add P3, comment about file, image width and height, max color value
+    tmp.append("P3\n");
+    tmp.append("# " + outFile + "\n");
+    tmp.append(image.width + " " + image.height + "\n");
+    tmp.append(image.max_color_value + "\n");
+    return tmp;
+  }
+
+  public StringBuilder append_pixels(Image image, StringBuilder output) {
+    // for each pixel
+    for (int row = 0; row < image.height; row++) {
+      for (int col = 0; col < image.width; col++) {
+        // append to StringBuidler
+        Pixel pixel = image.pixels[row][col];
+        output.append(pixel.red + "\n");
+        output.append(pixel.green + "\n");
+        output.append(pixel.blue + "\n");
+      }
+    }
+    return output;
+  }
+
+  public void save (Image image, String [] args) {
+
+    try {
+      // get outputs file
+      String outFile = args[1];
+      // build file header
+      StringBuilder output = build_file_header(image, outFile);
+      // add pixels
+      output = append_pixels(image, output);
+
+      // save StringBuilder output
+      System.out.println("output => \n" + output.toString());
+      PrintWriter writer = new PrintWriter(new File(outFile));
+      writer.println(output.toString());
+      writer.close();
+
+    } catch (Exception e) {
+      System.out.println("Exception => " + e);
+    } finally {
+      return;
+    }
+  }
+
   public static void main(String [] args) {
 
     // create ImageEditor object
     ImageEditor imageEditor = new ImageEditor();
 
     // load image into memory
-    Image image = imageEditor.load_image(args);
+    Image original_image = imageEditor.load_image(args);
 
-    image.print();
     // perform transformation
+    Image transformed_image = imageEditor.transform(original_image, args);
 
     // save image
+    imageEditor.save(transformed_image, args);
 
   }
 
