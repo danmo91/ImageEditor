@@ -1,6 +1,6 @@
-package services;
+package imageEditor;
 
-import services.Pixel;
+import imageEditor.Pixel;
 
 public class Image {
 

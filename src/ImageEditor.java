@@ -1,5 +1,5 @@
-import services.Image;
-import services.Pixel;
+import imageEditor.Image;
+import imageEditor.Pixel;
 import java.util.Scanner;
 import java.io.*;
 
@@ -110,6 +110,80 @@ public class ImageEditor {
     return image;
   }
 
+  public Image grayscale(Image image) {
+
+    // new_value = (red + green + blue)/3
+    for (int row = 0; row < image.height; row++) {
+      for (int col = 0; col < image.width; col++) {
+        // get pixel
+        Pixel pixel = image.pixels[row][col];
+        // transform each color
+        int gray_color = (pixel.red + pixel.green + pixel.blue)/3;
+        pixel.red = gray_color;
+        pixel.green = gray_color;
+        pixel.blue = gray_color;
+        // save
+        image.pixels[row][col] = pixel;
+      }
+    }
+
+
+    return image;
+  }
+
+  public Image emboss(Image image) {
+
+    // for each pixel
+    for (int row = 0; row < image.height; row++) {
+      for (int col = 0; col < image.width; col++) {
+
+        // get pixel
+        Pixel pixel = image.pixels[row][col];
+        int emboss_value = 0;
+        int maxDiff = 0;
+
+        // calculate emboss value
+        if (row-1 >= 0 && col-1 >= 0) {
+
+          // get color diffs
+          int redDiff = pixel.red - image.pixels[row-1][col-1].red;
+          int greenDiff = pixel.green - image.pixels[row-1][col-1].green;
+          int blueDiff = pixel.blue - image.pixels[row-1][col-1].blue;
+
+          // find max diff
+          maxDiff = redDiff;
+          if (Math.abs(maxDiff) < Math.abs(greenDiff)) {
+            maxDiff = greenDiff;
+          } else if (Math.abs(maxDiff) < Math.abs(blueDiff)) {
+            maxDiff = blueDiff;
+          }
+
+          // set emboss value
+          emboss_value = 128 + maxDiff;
+
+          // scale emboss value
+          if (emboss_value < 0) {
+            emboss_value = 0;
+          } else if (emboss_value > 255) {
+            emboss_value = 255;
+          }
+
+        } else {
+          emboss_value = 128;
+        }
+
+        // transform each color
+        pixel.red = emboss_value;
+        pixel.green = emboss_value;
+        pixel.blue = emboss_value;
+
+        // save
+        image.pixels[row][col] = pixel;
+      }
+    }
+    return image;
+  }
+
   public Image transform (Image image, String [] args) {
 
     // invert, grayscale, emboss, motionblur
@@ -123,6 +197,8 @@ public class ImageEditor {
       // transform image
       if (transformation.equals("invert")) {
         image = invert(image);
+      } else if (transformation.equals("grayscale")) {
+        image = grayscale(image);
       }
 
 

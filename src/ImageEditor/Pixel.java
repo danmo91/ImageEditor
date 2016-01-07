@@ -1,4 +1,4 @@
-package services;
+package imageEditor;
 
 public class Pixel {
 
@@ -8,7 +8,7 @@ public class Pixel {
 
   public void print () {
     System.out.println("(" + red + "," + green + "," + blue + ")");
-    
+
   }
 
 
