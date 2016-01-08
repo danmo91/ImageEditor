@@ -1,5 +1,7 @@
 package imageEditor;
 
+// this class holds functions for transforming ppm images
+
 public class Effects {
 
   public static void invert (Image image) {
