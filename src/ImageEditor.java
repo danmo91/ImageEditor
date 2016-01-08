@@ -100,7 +100,7 @@ public class ImageEditor {
 
   }
 
-  public Image invert (Image image) {
+  public void invert (Image image) {
     // inverted_value = max_color_value - original_value
     for (int row = 0; row < image.height; row++) {
       for (int col = 0; col < image.width; col++) {
@@ -115,10 +115,10 @@ public class ImageEditor {
       }
     }
 
-    return image;
+    return;
   }
 
-  public Image grayscale(Image image) {
+  public void grayscale(Image image) {
 
     // new_value = (red + green + blue)/3
     for (int row = 0; row < image.height; row++) {
@@ -136,10 +136,10 @@ public class ImageEditor {
     }
 
 
-    return image;
+    return;
   }
 
-  public Image emboss(Image image) {
+  public void emboss(Image image) {
 
     // for each pixel
     for (int row = image.height-1; row > 0; row--) {
@@ -190,7 +190,7 @@ public class ImageEditor {
 
       }
     }
-    return image;
+    return;
   }
 
   public Image transform (Image image, String [] args) {
@@ -203,11 +203,11 @@ public class ImageEditor {
 
       // transform image
       if (transformation.equals("invert")) {
-        image = invert(image);
+        invert(image);
       } else if (transformation.equals("grayscale")) {
-        image = grayscale(image);
+        grayscale(image);
       } else if (transformation.equals("emboss")) {
-        image = emboss(image);
+        emboss(image);
       }
 
 
@@ -229,7 +229,7 @@ public class ImageEditor {
     return tmp;
   }
 
-  public StringBuilder append_pixels(Image image, StringBuilder output) {
+  public void append_pixels(Image image, StringBuilder output) {
     // for each pixel
     for (int row = 0; row < image.height; row++) {
       for (int col = 0; col < image.width; col++) {
@@ -240,7 +240,7 @@ public class ImageEditor {
         output.append(pixel.blue + "\n");
       }
     }
-    return output;
+    return;
   }
 
   public void save (Image image, String [] args) {
@@ -251,7 +251,7 @@ public class ImageEditor {
       // build file header
       StringBuilder output = build_file_header(image, outFile);
       // add pixels
-      output = append_pixels(image, output);
+      append_pixels(image, output);
 
       // save StringBuilder output
       PrintWriter writer = new PrintWriter(new File(outFile));
