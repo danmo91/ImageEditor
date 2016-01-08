@@ -193,6 +193,54 @@ public class ImageEditor {
     return;
   }
 
+  public void motionblur(Image image, int motion_blur_length) {
+
+    try {
+      // check valid blur length
+      if (motion_blur_length <= 0) {
+        throw new Exception("invalid motion blur length => " + motion_blur_length );
+      }
+      // get average for each color
+      for (int row = 0; row < image.height; row++) {
+        for (int col = 0; col < image.width; col++) {
+          // get pixel
+          Pixel pixel = image.pixels[row][col];
+
+          // get sum of each color
+          int red_sum = 0;
+          int green_sum = 0;
+          int blue_sum = 0;
+          int actual_length = 1;
+          for (int i = col; (i < col + motion_blur_length - 1) && (i < image.width); i++) {
+            red_sum += image.pixels[row][i].red;
+            green_sum += image.pixels[row][i].green;
+            blue_sum += image.pixels[row][i].blue;
+            actual_length++;
+          }
+
+          // calculate average
+          int red_average = red_sum/actual_length;
+          int green_average = green_sum/actual_length;
+          int blue_average = blue_sum/actual_length;
+
+          // transform each color
+          pixel.red = red_average;
+          pixel.green = green_average;
+          pixel.blue = blue_average;
+
+          // save
+          image.pixels[row][col] = pixel;
+        }
+      }
+
+
+    } catch (Exception e) {
+      System.out.println("Exception => " + e);
+    } finally {
+      return;
+    }
+  }
+
   public Image transform (Image image, String [] args) {
 
     // invert, grayscale, emboss, motionblur
@@ -208,6 +256,9 @@ public class ImageEditor {
         grayscale(image);
       } else if (transformation.equals("emboss")) {
         emboss(image);
+      } else if (transformation.equals("motionblur")) {
+        int motion_blur_length = Integer.valueOf(args[3]);
+        motionblur(image, motion_blur_length);
       }
 
 
