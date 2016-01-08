@@ -8,6 +8,25 @@ import java.io.File;
 
 public class FileHandler {
 
+  public static Image load(String [] args) {
+
+    Image image = new Image();
+
+    try {
+      File srcFile = new File(args[0]);
+      Scanner scanner = new Scanner(srcFile);
+      image = parse_file(scanner);
+      scanner.close();
+    }
+    catch (Exception e) {
+      System.out.println("exception => " + e);
+      System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
+    }
+    finally {
+      return image;
+    }
+  }
+
   public static Image parse_file(Scanner scanner) {
 
     Image image = new Image();

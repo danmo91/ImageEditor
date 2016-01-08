@@ -6,29 +6,29 @@ import java.io.File;
 
 public class ImageEditor {
 
-  public Image load_image (String [] args) {
+  // public Image load_image (String [] args) {
+  //
+  //
+  //
+  //   try {
+  //
+  //     File srcFile = new File(args[0]);
+  //     Scanner scanner = new Scanner(srcFile);
+  //     image = FileHandler.parse_file(scanner);
+  //     scanner.close();
+  //
+  //   }
+  //   catch (Exception e) {
+  //     System.out.println("exception => " + e);
+  //     System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
+  //   }
+  //   finally {
+  //     return image;
+  //   }
+  //
+  // }
 
-    Image image = new Image();
-
-    try {
-
-      File srcFile = new File(args[0]);
-      Scanner scanner = new Scanner(srcFile);
-      image = FileHandler.parse_file(scanner);
-      scanner.close();
-
-    }
-    catch (Exception e) {
-      System.out.println("exception => " + e);
-      System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
-    }
-    finally {
-      return image;
-    }
-
-  }
-
-  public Image transform (Image image, String [] args) {
+  public Image transform_image (Image image, String [] args) {
 
     // invert, grayscale, emboss, motionblur
 
@@ -57,16 +57,26 @@ public class ImageEditor {
     }
   }
 
+
+
+
+  public Image load (String [] args) {
+
+    Image image = FileHandler.load(args);
+    return image;
+
+  }
+
   public static void main(String [] args) {
 
     // create ImageEditor object
     ImageEditor imageEditor = new ImageEditor();
 
     // load image
-    Image original_image = imageEditor.load_image(args);
+    Image original_image = imageEditor.load(args);
 
     // perform transformation
-    Image transformed_image = imageEditor.transform(original_image, args);
+    Image transformed_image = imageEditor.transform_image(original_image, args);
 
     // save image
     FileHandler.save(transformed_image, args);
