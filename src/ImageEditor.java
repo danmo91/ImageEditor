@@ -1,6 +1,3 @@
-import imageEditor.Image;
-import imageEditor.Effects;
-import imageEditor.FileHandler;
 import java.util.Scanner;
 import java.io.File;
 
