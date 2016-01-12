@@ -44,8 +44,8 @@ public class Effects {
   public static void emboss(Image image) {
 
     // for each pixel
-    for (int row = image.height-1; row > 0; row--) {
-      for (int col = image.width-1; col > 0; col--) {
+    for (int row = image.height-1; row >= 0; row--) {
+      for (int col = image.width-1; col >= 0; col--) {
 
         // get pixel
         Pixel pixel = image.pixels[row][col];
