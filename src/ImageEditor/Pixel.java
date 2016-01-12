@@ -1,4 +1,4 @@
-package imageEditor;
+package ImageEditor;
 
 public class Pixel {
 

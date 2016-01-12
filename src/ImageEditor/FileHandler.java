@@ -1,4 +1,4 @@
-package imageEditor;
+package ImageEditor;
 
 import java.util.Scanner;
 import java.io.PrintWriter;

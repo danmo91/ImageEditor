@@ -1,4 +1,4 @@
-package imageEditor;
+package ImageEditor;
 
 // this class holds functions for transforming ppm images
 

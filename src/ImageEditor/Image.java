@@ -1,6 +1,4 @@
-package imageEditor;
-
-import imageEditor.Pixel;
+package ImageEditor;
 
 public class Image {
 
