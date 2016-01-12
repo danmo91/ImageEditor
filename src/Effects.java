@@ -64,7 +64,8 @@ public class Effects {
           maxDiff = redDiff;
           if (Math.abs(maxDiff) < Math.abs(greenDiff)) {
             maxDiff = greenDiff;
-          } else if (Math.abs(maxDiff) < Math.abs(blueDiff)) {
+          }
+          if (Math.abs(maxDiff) < Math.abs(blueDiff)) {
             maxDiff = blueDiff;
           }
 
