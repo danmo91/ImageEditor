@@ -6,28 +6,6 @@ import java.io.File;
 
 public class ImageEditor {
 
-  // public Image load_image (String [] args) {
-  //
-  //
-  //
-  //   try {
-  //
-  //     File srcFile = new File(args[0]);
-  //     Scanner scanner = new Scanner(srcFile);
-  //     image = FileHandler.parse_file(scanner);
-  //     scanner.close();
-  //
-  //   }
-  //   catch (Exception e) {
-  //     System.out.println("exception => " + e);
-  //     System.out.println("USAGE: java ImageEditor in-file out-file (grayscale|invert|emboss|motionblur motion-blur-length)");
-  //   }
-  //   finally {
-  //     return image;
-  //   }
-  //
-  // }
-
   public Image transform_image (Image image, String [] args) {
 
     // invert, grayscale, emboss, motionblur
@@ -56,9 +34,6 @@ public class ImageEditor {
       return image;
     }
   }
-
-
-
 
   public Image load (String [] args) {
 
