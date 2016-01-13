@@ -43,7 +43,7 @@ public class Effects {
 
   public static void emboss(Image image) {
 
-    // for each pixel
+    // for each pixel, loop from bottom right to top left
     for (int row = image.height-1; row >= 0; row--) {
       for (int col = image.width-1; col >= 0; col--) {
 
@@ -112,15 +112,14 @@ public class Effects {
           int red_sum = 0;
           int green_sum = 0;
           int blue_sum = 0;
-          int actual_length = 1;
+          int actual_length = 0;
+
           for (int i = col; (i < col + motion_blur_length - 1) && (i < image.width); i++) {
             red_sum += image.pixels[row][i].red;
             green_sum += image.pixels[row][i].green;
             blue_sum += image.pixels[row][i].blue;
             actual_length++;
           }
-
-          // System.out.println("actual length => " + actual_length);
 
           // calculate average
           int red_average = red_sum/actual_length;
@@ -132,8 +131,6 @@ public class Effects {
           pixel.green = green_average;
           pixel.blue = blue_average;
 
-          // save
-          image.pixels[row][col] = pixel;
         }
       }
 
