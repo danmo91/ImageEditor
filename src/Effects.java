@@ -114,7 +114,7 @@ public class Effects {
           int blue_sum = 0;
           int actual_length = 0;
 
-          for (int i = col; (i < col + motion_blur_length - 1) && (i < image.width); i++) {
+          for (int i = col; (i < col + motion_blur_length) && (i < image.width); i++) {
             red_sum += image.pixels[row][i].red;
             green_sum += image.pixels[row][i].green;
             blue_sum += image.pixels[row][i].blue;
