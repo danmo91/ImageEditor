@@ -50,18 +50,20 @@ public class Effects {
         // get pixel
         Pixel pixel = image.pixels[row][col];
         int emboss_value = 0;
-        int maxDiff = 0;
 
         // calculate emboss value
-        if (row-1 >= 0 && col-1 >= 0) {
+        if (row > 0 && col > 0) {
+
+          // upperLeft pixel
+          Pixel upperLeftPixel = image.pixels[row-1][col-1];
 
           // get color diffs
-          int redDiff = pixel.red - image.pixels[row-1][col-1].red;
-          int greenDiff = pixel.green - image.pixels[row-1][col-1].green;
-          int blueDiff = pixel.blue - image.pixels[row-1][col-1].blue;
+          int redDiff = pixel.red - upperLeftPixel.red;
+          int greenDiff = pixel.green - upperLeftPixel.green;
+          int blueDiff = pixel.blue - upperLeftPixel.blue;
 
           // find max diff
-          maxDiff = redDiff;
+          int maxDiff = redDiff;
           if (Math.abs(maxDiff) < Math.abs(greenDiff)) {
             maxDiff = greenDiff;
           }
@@ -87,9 +89,6 @@ public class Effects {
         pixel.red = emboss_value;
         pixel.green = emboss_value;
         pixel.blue = emboss_value;
-
-        // save
-        image.pixels[row][col] = pixel;
 
       }
     }
@@ -120,6 +119,8 @@ public class Effects {
             blue_sum += image.pixels[row][i].blue;
             actual_length++;
           }
+
+          // System.out.println("actual length => " + actual_length);
 
           // calculate average
           int red_average = red_sum/actual_length;
